@@ -1,0 +1,7 @@
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\bin\Debug\GeneticConsole.exe.config
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\bin\Debug\GeneticConsole.exe
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\bin\Debug\GeneticConsole.pdb
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\obj\Debug\GeneticConsole.csprojAssemblyReference.cache
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\obj\Debug\GeneticConsole.csproj.CoreCompileInputs.cache
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\obj\Debug\GeneticConsole.exe
+C:\Users\aptik\source\repos\GeneticConsole\GeneticConsole\obj\Debug\GeneticConsole.pdb
