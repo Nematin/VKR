@@ -11,7 +11,7 @@ namespace GA
         private Random random = new Random();
         private double mutationRate;
         private double crossoverRate;
-        private GeneticAlgorithm<double> geneticAlgorithm;
+        private GeneticAlgorithm geneticAlgorithm;
 
         public GeneticTestEnvironment()
         {
@@ -24,15 +24,14 @@ namespace GA
             mutationRate = 0.2;
             crossoverRate = 0.3;
 
-            geneticAlgorithm = new GeneticAlgorithm<double>(populationSize,
+            geneticAlgorithm = new GeneticAlgorithm(populationSize,
                                                            dnaSize,
                                                            random,
                                                            GetRandomNumber,
                                                            FitFunction,
                                                            mutationRate,
                                                            crossoverRate);
-
-            while (geneticAlgorithm.BestFit != 1)
+            for (int i = 0; i < 100; i++)
             {
                 geneticAlgorithm.NewGeneration(crossoverRate);
                 Console.WriteLine("Поколение: " + geneticAlgorithm.Generation);
@@ -40,7 +39,7 @@ namespace GA
             }
         }
 
-        private void ShowPopulation(List<DNA<double>> population)
+        private void ShowPopulation(List<Specimen> population)
         {
             StringBuilder sb = new StringBuilder();
             foreach(var specimen in population)
@@ -50,9 +49,7 @@ namespace GA
             Console.WriteLine(sb);
         }
 
-        //<summary>
-        //Метод GetRandomNumber создаёт массив чисел, одно из них будет в последствии геном у особи.
-        //</summary>
+
         public double GetRandomNumber()
         {
             double[] newArr = new double[100];
@@ -76,13 +73,11 @@ namespace GA
             return newArr[rand.Next(newArr.Length)];
         }
 
-        //<summary>
-        //Метод FitFunction подсчёт значения функции. Или вычисление приспосабливаемости особи
-        //</summary>
+
         public double FitFunction(int index)
         {
             double result = 0;
-            DNA<double> dna = geneticAlgorithm.Population[index];
+            Specimen dna = geneticAlgorithm.Population[index];
 
             result = (Math.Pow((dna.Genes[0] - 10), 2) - 3);
             return result;

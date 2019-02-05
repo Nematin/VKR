@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,43 +7,38 @@ using System.Threading.Tasks;
 
 namespace GA
 {
-    public class GeneticAlgorithm<T>
+    public class GeneticAlgorithm
     {
-        public List<DNA<T>> Population { get; set; }
+        public ArrayList allPopulation = new ArrayList();
+        public List<Specimen> Population { get; set; }
         public int Generation { get; set; }
         public double MutationRate { get; set; }
         public double CrossoverRate { get; set; }
         public double BestFit { get; set; }
-        public T[] BestGenes { get; set; }
+        public double[] BestGenes { get; set; }
 
         private Random random;
         private double totalFitness;
 
 
-        //<summary>
-        //Конструктор GeneticAlgorithm отвечает за создание популяции с заданными параметрами
-        //</summary>
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<T> getRandomGene, Func<int,double> fitFunction, double mutationRate, double crossoverRate)
+        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int,double> fitFunction, double mutationRate, double crossoverRate)
         {
-            Generation = 1;
+            Generation = 0;
             MutationRate = mutationRate;
-            Population = new List<DNA<T>>();
+            Population = new List<Specimen>();
             CrossoverRate = crossoverRate;
 
             this.random = random;
 
-            BestGenes = new T[dnaSize];
+            BestGenes = new double[dnaSize];
 
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new DNA<T>(dnaSize, random, getRandomGene, fitFunction, true));
+                Population.Add(new Specimen(dnaSize, random, getRandomGene, fitFunction, true));
                 System.Threading.Thread.Sleep(100);
             }
         }
 
-        //<summary>
-        //Метод NewGeneration отвечает создание нового поколения особей, со случайной мутацией у ребёнка
-        //</summary>
         public void NewGeneration(double crossoverRate)
         {
             if (Population.Count <= 0)
@@ -50,19 +46,19 @@ namespace GA
 
             CalculateFitness();
 
-            List<DNA<T>> newPopulation = new List<DNA<T>>();
-            
+            List<Specimen> newPopulation = new List<Specimen>();
+
+            allPopulation.Add(Population);
+
             for (int i = 0; i < Population.Count; i++)
             {
-                DNA<T> firstParent = SelectParent();
-                DNA<T> secondParent = SelectParent();
+                Specimen firstParent = SelectParent();
+                Specimen secondParent = SelectParent();
 
-                DNA<T> child = firstParent.Crossover(secondParent, crossoverRate);
+                Specimen child = firstParent.Crossover(secondParent);
 
-                if(random.NextDouble() < 0.8)
-                {
-                    child.Mutate(MutationRate);
-                }
+                if (MutationRate > random.NextDouble())
+                    child.Mutate();
 
                 newPopulation.Add(child);
             }
@@ -70,13 +66,10 @@ namespace GA
             Generation++;
         }
 
-        //<summary>
-        //Метод CalculateFitness отвечает нахождение лучшей особи в популяции
-        //</summary>
         public void CalculateFitness()
         {
             totalFitness = 0;
-            DNA<T> best = Population[0];
+            Specimen best = Population[0];
             for (int i = 0; i < Population.Count; i++)
             {
                 totalFitness += Population[i].CalculateFitness(i);
@@ -88,26 +81,33 @@ namespace GA
             best.Genes.CopyTo(BestGenes, 0);
         }
 
-        //<summary>
-        //Метод SelectParent отвечает выбор случайного родителя
-        //</summary>
-        private DNA<T> SelectParent()
+        private Specimen SelectParent()
         {
             System.Threading.Thread.Sleep(100);
             double randNumber = random.NextDouble() * totalFitness;
+            int index = -1;
+            int mid;
+            int first = 0;
+            int last = Population.Count - 1;
 
-            for (int i = 0; i < Population.Count; i++)
+            mid = (first + last) / 2;
+            while (index==-1 && first<=last)
             {
-                if(Population[i].Fitness < 200)
+                if(randNumber < Population[mid].Fitness)
                 {
-                    if (randNumber < Population[i].Fitness)
-                    {
-                        return Population[i];
-                    }
-                    randNumber = Population[i].Fitness;
+                    last = mid;
                 }
+                else if(randNumber > Population[mid].Fitness)
+                {
+                    first = mid;
+                }
+                mid = (first + last) / 2;
+
+                if ((last - first) == 1)
+                    index = last;
             }
-            return null;
+
+            return Population[index];
         }
     }
 }
