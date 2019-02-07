@@ -10,23 +10,29 @@ namespace GA
     public class GeneticAlgorithm
     {
         public ArrayList allPopulation = new ArrayList();
+
+        public List<Specimen> newPopulation = new List<Specimen>();
+        public List<Specimen> oldPopulation = new List<Specimen>();
+
         public List<Specimen> Population { get; set; }
         public int Generation { get; set; }
         public double MutationRate { get; set; }
         public double CrossoverRate { get; set; }
         public double BestFit { get; set; }
         public double[] BestGenes { get; set; }
+        public int PopulationSize { get; set; }
 
         private Random random;
         private double totalFitness;
 
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int,double> fitFunction, double mutationRate, double crossoverRate)
+        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int, double> fitFunction, double mutationRate, double crossoverRate)
         {
             Generation = 0;
             MutationRate = mutationRate;
             Population = new List<Specimen>();
             CrossoverRate = crossoverRate;
+            PopulationSize = populationSize;
 
             this.random = random;
 
@@ -44,26 +50,76 @@ namespace GA
             if (Population.Count <= 0)
                 return;
 
-            CalculateFitness();
+            //CalculateFitness();
 
-            List<Specimen> newPopulation = new List<Specimen>();
-
+            newPopulation = new List<Specimen>();
+            oldPopulation = new List<Specimen>();
+            List<Specimen> bestOfTheBest = new List<Specimen>();
             allPopulation.Add(Population);
 
             for (int i = 0; i < Population.Count; i++)
             {
-                Specimen firstParent = SelectParent();
-                Specimen secondParent = SelectParent();
+                for (int j = 0; j < Population.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        j++;
+                    }
+                    if (j == Population.Count)
+                        break;
 
-                Specimen child = firstParent.Crossover(secondParent);
+                    Specimen firstParent = Population[i];
+                    Specimen secondParent = Population[j];
 
-                if (MutationRate > random.NextDouble())
-                    child.Mutate();
+                    Specimen child = firstParent.Crossover(secondParent);
+                    if (random.NextDouble() < MutationRate)
+                        child.Mutate(child.Genes);
 
-                newPopulation.Add(child);
+
+                    newPopulation.Add(child);
+                }
             }
-            Population = newPopulation;
+
+            for (int i = 0; i < Population.Count; i++)
+            {
+                oldPopulation.Add(Population[i]);
+            }
+
+            Population.Clear();
+            for (int i = 0; i < oldPopulation.Count; i++)
+            {
+                Population.Add(oldPopulation[i]);
+            }
+
+            for (int i = 0; i < newPopulation.Count; i++)
+            {
+                Population.Add(newPopulation[i]);
+            }
+
+            CalculateFitness();
+
+            Population.Sort((a, b) => a.Fitness.CompareTo(b.Fitness));
+
+            for (int i = 0; i < PopulationSize; i++)
+            {
+                bestOfTheBest.Add(Population[i]);
+            }
+            Population = bestOfTheBest;
             Generation++;
+
+            //for (int i = 0; i < Population.Count; i++)
+            //{
+            //    Specimen firstParent = SelectParent();
+            //    Specimen secondParent = SelectParent();
+
+            //    Specimen child = firstParent.Crossover(secondParent);
+
+            //    if (MutationRate > random.NextDouble())
+            //        child.Mutate();
+
+            //    newPopulation.Add(child);
+            //}
+            //Population = newPopulation;
         }
 
         public void CalculateFitness()
@@ -91,13 +147,13 @@ namespace GA
             int last = Population.Count - 1;
 
             mid = (first + last) / 2;
-            while (index==-1 && first<=last)
+            while (index == -1 && first <= last)
             {
-                if(randNumber < Population[mid].Fitness)
+                if (randNumber < Population[mid].Fitness)
                 {
                     last = mid;
                 }
-                else if(randNumber > Population[mid].Fitness)
+                else if (randNumber > Population[mid].Fitness)
                 {
                     first = mid;
                 }

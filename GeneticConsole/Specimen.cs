@@ -26,7 +26,7 @@ namespace GA
             {
                 for (int i = 0; i < Genes.Length; i++)
                 {
-                    Genes[i] = random.Next(10, 100) * random.NextDouble();
+                    Genes[i] = Math.Round(random.Next(150, 1500) * Math.Round(random.NextDouble(),5),5);
                 }
             }
         }
@@ -44,25 +44,15 @@ namespace GA
             for (int i = 0; i < Genes.Length; i++)
             {
                 child.Genes[i] = (Genes[i] + parent2.Genes[i]) / 2;
-
-
-                //if (random.NextDouble() < crossoverRate)
-                //{
-                //    child.Genes[i] = Genes[i] + random.NextDouble() * (Genes[i] / 5) - (Genes[i] / 10);
-                //}
-                //else
-                //{
-                //    child.Genes[i] = parent2.Genes[i] + random.NextDouble() * (parent2.Genes[i] / 5) - (parent2.Genes[i] / 10);
-                //}
             }
             return child;
         }
 
-        public void Mutate()
+        public void Mutate(double[] Genes)
         {
             for (int i = 0; i < Genes.Length; i++)
             {
-                Genes[i] = Genes[i] + random.NextDouble() * (Genes[i] / 5) - (Genes[i] / 10);
+                Genes[i] = Genes[i] + random.NextDouble() * (Genes[i] / 5) - (Genes[i] / 3);
             }
         }
 
