@@ -11,3 +11,10 @@ C:\Users\Artem\Downloads\VKR-master\GeneticConsole\obj\Debug\GeneticConsole.pdb
 C:\Users\Artem\Downloads\VKR-master\GeneticConsole\bin\Debug\GeneticConsole.exe
 C:\Users\Artem\Downloads\VKR-master\GeneticConsole\bin\Debug\GeneticConsole.pdb
 C:\Users\Artem\Downloads\VKR-master\GeneticConsole\obj\Debug\GeneticConsole.csprojResolveAssemblyReference.cache
+D:\VKR\VKR\VKR\GeneticConsole\bin\Debug\GeneticConsole.exe.config
+D:\VKR\VKR\VKR\GeneticConsole\bin\Debug\GeneticConsole.exe
+D:\VKR\VKR\VKR\GeneticConsole\bin\Debug\GeneticConsole.pdb
+D:\VKR\VKR\VKR\GeneticConsole\obj\Debug\GeneticConsole.csprojAssemblyReference.cache
+D:\VKR\VKR\VKR\GeneticConsole\obj\Debug\GeneticConsole.csproj.CoreCompileInputs.cache
+D:\VKR\VKR\VKR\GeneticConsole\obj\Debug\GeneticConsole.exe
+D:\VKR\VKR\VKR\GeneticConsole\obj\Debug\GeneticConsole.pdb

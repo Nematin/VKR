@@ -21,7 +21,7 @@ namespace GA
         public void RunEvolution()
         {
             populationSize = 10;
-            dnaSize = 1;
+            dnaSize = 2;
             mutationRate = 0.3;
             crossoverRate = 0.3;
 
@@ -36,6 +36,7 @@ namespace GA
             for (int i = 0; i < 1000; i++)
             {
                 geneticAlgorithm.NewGeneration(crossoverRate);
+                Console.WriteLine();
                 Console.WriteLine("Поколение: " + geneticAlgorithm.Generation);
                 ShowPopulation(geneticAlgorithm.Population);
                 ShowBestInGeneration(geneticAlgorithm.Population);
@@ -46,17 +47,17 @@ namespace GA
         private void ShowPopulation(List<Specimen> population)
         {
             StringBuilder sb = new StringBuilder();
-            foreach (var specimen in population)
+
+            for (int i = 0; i < population.Count; i++)
             {
-                sb.Append(specimen.Genes[0] + " ");
+               Console.WriteLine(ShowResultString(population[i]));
             }
-            Console.WriteLine(sb);
         }
 
         private void ShowBestInGeneration(List<Specimen> population)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("Лучший в поколении №" + geneticAlgorithm.Generation + ": " + population[0].Genes[0] + "\n");
+            sb.Append("Лучший в поколении №" + geneticAlgorithm.Generation + ": " + ShowResultString(population[0]) + "\n");
             sb.Append("Значение функции: " + population[0].Fitness);
             Console.WriteLine(sb);
         }
@@ -96,8 +97,8 @@ namespace GA
                 }
             }
             sb.Append("\nВывод\n");
-            sb.Append("Лучший из всех в поколении №" + (bestGeneration + 1) + ": " + best.Genes[0] + " Значение функции: " + best.Fitness + "\n");
-            sb.Append("Худший из всех в поколении №" + (worstGeneration + 1) + ": " + worst.Genes[0] + " Значение функции: " + worst.Fitness + "\n");
+            sb.Append("Лучший из всех в поколении №" + (bestGeneration + 1) + ": " + ShowResultString(best) + " Значение функции: " + best.Fitness + "\n");
+            sb.Append("Худший из всех в поколении №" + (worstGeneration + 1) + ": " + ShowResultString(worst) + " Значение функции: " + worst.Fitness + "\n");
             Console.WriteLine(sb);
         }
 
@@ -135,8 +136,28 @@ namespace GA
 
             //result = -Math.Pow(dna.Genes[0],2)+2;
 
-            result = Math.Pow(dna.Genes[0], 4) - 4 * Math.Pow(dna.Genes[0], 3) - 2 * Math.Pow(dna.Genes[0], 2) + 5 * dna.Genes[0] + 9; 
+            //result = Math.Pow(dna.Genes[0], 4) - 4 * Math.Pow(dna.Genes[0], 3) - 2 * Math.Pow(dna.Genes[0], 2) + 5 * dna.Genes[0] + 9;
+
+            result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
             return result;
+        }
+
+        public string ShowResultString(Specimen specimen)
+        {
+            StringBuilder sb1 = new StringBuilder();
+            sb1.Append("[");
+            for (int i = 0; i < specimen.Genes.Length; i++)
+            {
+                sb1.Append(specimen.Genes[i]);
+                if (i == specimen.Genes.Length)
+                {
+
+                }
+                else
+                    sb1.Append(" ");
+            }
+            sb1.Append("]");
+            return sb1.ToString();
         }
     }
 }
