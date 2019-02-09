@@ -10,7 +10,7 @@ namespace GA
             get { return generator; }
         }
 
-        public readonly Func<ArithmeticSpecimen, double> EnvironmentFittingFunction;
+        private readonly Func<ArithmeticSpecimen, double> EnvironmentFittingFunction;
 
         public override Func<Specimen, double> FittingFunction
         {
