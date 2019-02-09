@@ -138,7 +138,9 @@ namespace GA
 
             //result = Math.Pow(dna.Genes[0], 4) - 4 * Math.Pow(dna.Genes[0], 3) - 2 * Math.Pow(dna.Genes[0], 2) + 5 * dna.Genes[0] + 9;
 
-            result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
+            //result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
+
+            result = Math.Pow((dna.Genes[0] + 2 * dna.Genes[1] - 7), 2) + Math.Pow((2 * dna.Genes[0] + dna.Genes[1] - 5), 2);
             return result;
         }
 
@@ -160,4 +162,4 @@ namespace GA
             return sb1.ToString();
         }
     }
-}
+}+-
