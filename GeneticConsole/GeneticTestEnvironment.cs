@@ -26,7 +26,7 @@ namespace GA
             mutationRate = 0.3;
             crossoverRate = 0.3;
             mutationAmplitude = 0.5;
-            
+
 
             geneticAlgorithm = new GeneticAlgorithm(populationSize,
                                                            dnaSize,
@@ -54,7 +54,7 @@ namespace GA
 
             for (int i = 0; i < population.Count; i++)
             {
-               Console.WriteLine(ShowResultString(population[i]));
+                Console.WriteLine(ShowResultString(population[i]));
             }
         }
 
@@ -144,7 +144,9 @@ namespace GA
 
             //result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
 
-            result = 0.26 * (Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2)) - 0.48 * dna.Genes[0] * dna.Genes[1];
+            //result = 0.26 * (Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2)) - 0.48 * dna.Genes[0] * dna.Genes[1];
+
+            result = Math.Pow((dna.Genes[0] + 2 * dna.Genes[1] - 7), 2) + Math.Pow((2 * dna.Genes[0] + dna.Genes[1] - 5), 2);
             return result;
         }
 
