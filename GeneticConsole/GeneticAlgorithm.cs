@@ -26,7 +26,7 @@ namespace GA
         private double totalFitness;
 
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int, double> fitFunction, double mutationRate, double crossoverRate)
+        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<Specimen, double> fitFunction, double mutationRate, double crossoverRate, double mutationAmplitude)
         {
             Generation = 0;
             MutationRate = mutationRate;
@@ -40,7 +40,7 @@ namespace GA
 
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new Specimen(dnaSize, random, getRandomGene, fitFunction, true));
+                Population.Add(new Specimen(dnaSize, random, getRandomGene, fitFunction, mutationAmplitude, true));
                 System.Threading.Thread.Sleep(100);
             }
         }
@@ -73,7 +73,7 @@ namespace GA
 
                     Specimen child = firstParent.Crossover(secondParent);
                     if (random.NextDouble() < MutationRate)
-                        child.Mutate(child.Genes);
+                        child.Mutate();
 
 
                     newPopulation.Add(child);
@@ -106,20 +106,6 @@ namespace GA
             }
             Population = bestOfTheBest;
             Generation++;
-
-            //for (int i = 0; i < Population.Count; i++)
-            //{
-            //    Specimen firstParent = SelectParent();
-            //    Specimen secondParent = SelectParent();
-
-            //    Specimen child = firstParent.Crossover(secondParent);
-
-            //    if (MutationRate > random.NextDouble())
-            //        child.Mutate();
-
-            //    newPopulation.Add(child);
-            //}
-            //Population = newPopulation;
         }
 
         public void CalculateFitness()
@@ -128,7 +114,7 @@ namespace GA
             Specimen best = Population[0];
             for (int i = 0; i < Population.Count; i++)
             {
-                totalFitness += Population[i].CalculateFitness(i);
+                totalFitness += Population[i].CalculateFitness(Population[i]);
 
                 if (Population[i].Fitness < best.Fitness)
                     best = Population[i];
@@ -137,33 +123,33 @@ namespace GA
             best.Genes.CopyTo(BestGenes, 0);
         }
 
-        private Specimen SelectParent()
-        {
-            System.Threading.Thread.Sleep(100);
-            double randNumber = random.NextDouble() * totalFitness;
-            int index = -1;
-            int mid;
-            int first = 0;
-            int last = Population.Count - 1;
+        //private Specimen SelectParent()
+        //{
+        //    System.Threading.Thread.Sleep(100);
+        //    double randNumber = random.NextDouble() * totalFitness;
+        //    int index = -1;
+        //    int mid;
+        //    int first = 0;
+        //    int last = Population.Count - 1;
 
-            mid = (first + last) / 2;
-            while (index == -1 && first <= last)
-            {
-                if (randNumber < Population[mid].Fitness)
-                {
-                    last = mid;
-                }
-                else if (randNumber > Population[mid].Fitness)
-                {
-                    first = mid;
-                }
-                mid = (first + last) / 2;
+        //    mid = (first + last) / 2;
+        //    while (index == -1 && first <= last)
+        //    {
+        //        if (randNumber < Population[mid].Fitness)
+        //        {
+        //            last = mid;
+        //        }
+        //        else if (randNumber > Population[mid].Fitness)
+        //        {
+        //            first = mid;
+        //        }
+        //        mid = (first + last) / 2;
 
-                if ((last - first) == 1)
-                    index = last;
-            }
+        //        if ((last - first) == 1)
+        //            index = last;
+        //    }
 
-            return Population[index];
-        }
+        //    return Population[index];
+        //}
     }
 }

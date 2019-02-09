@@ -12,6 +12,7 @@ namespace GA
         private Random random = new Random();
         private double mutationRate;
         private double crossoverRate;
+        private double mutationAmplitude;
         private GeneticAlgorithm geneticAlgorithm;
 
         public GeneticTestEnvironment()
@@ -24,6 +25,8 @@ namespace GA
             dnaSize = 2;
             mutationRate = 0.3;
             crossoverRate = 0.3;
+            mutationAmplitude = 0.5;
+
 
             geneticAlgorithm = new GeneticAlgorithm(populationSize,
                                                            dnaSize,
@@ -31,9 +34,10 @@ namespace GA
                                                            GetRandomNumber,
                                                            FitFunction,
                                                            mutationRate,
-                                                           crossoverRate);
+                                                           crossoverRate,
+                                                           mutationAmplitude);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 100; i++)
             {
                 geneticAlgorithm.NewGeneration(crossoverRate);
                 Console.WriteLine();
@@ -50,7 +54,7 @@ namespace GA
 
             for (int i = 0; i < population.Count; i++)
             {
-               Console.WriteLine(ShowResultString(population[i]));
+                Console.WriteLine(ShowResultString(population[i]));
             }
         }
 
@@ -125,10 +129,10 @@ namespace GA
             return newArr[rand.Next(newArr.Length)];
         }
 
-        public double FitFunction(int index)
+        public double FitFunction(Specimen specimen)
         {
             double result = 0;
-            Specimen dna = geneticAlgorithm.Population[index];
+            //Specimen dna = geneticAlgorithm.Population[index];
 
             //result = (Math.Pow((dna.Genes[0] - 10), 2) - 3);
 
@@ -140,7 +144,8 @@ namespace GA
 
             //result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
 
-            result = Math.Pow((dna.Genes[0] + 2 * dna.Genes[1] - 7), 2) + Math.Pow((2 * dna.Genes[0] + dna.Genes[1] - 5), 2);
+            result = Math.Pow((specimen.Genes[0] + 2 * specimen.Genes[1] - 7), 2) + Math.Pow((2 * specimen.Genes[0] + specimen.Genes[1] - 5), 2);
+
             return result;
         }
 
