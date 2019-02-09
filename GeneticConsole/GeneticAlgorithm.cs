@@ -17,7 +17,6 @@ namespace GA
         public List<Specimen> Population { get; set; }
         public int Generation { get; set; }
         public double MutationRate { get; set; }
-        public double CrossoverRate { get; set; }
         public double BestFit { get; set; }
         public double[] BestGenes { get; set; }
         public int PopulationSize { get; set; }
@@ -26,12 +25,11 @@ namespace GA
         private double totalFitness;
 
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<Specimen, double> fitFunction, double mutationRate, double crossoverRate, double mutationAmplitude)
+        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, double mutationRate, double mutationAmplitude)
         {
             Generation = 0;
             MutationRate = mutationRate;
             Population = new List<Specimen>();
-            CrossoverRate = crossoverRate;
             PopulationSize = populationSize;
 
             this.random = random;
@@ -40,17 +38,15 @@ namespace GA
 
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new Specimen(dnaSize, random, getRandomGene, fitFunction, mutationAmplitude, true));
+                Population.Add(new Specimen(dnaSize, random, mutationAmplitude));
                 System.Threading.Thread.Sleep(100);
             }
         }
 
-        public void NewGeneration(double crossoverRate)
+        public void NewGeneration()
         {
             if (Population.Count <= 0)
                 return;
-
-            //CalculateFitness();
 
             newPopulation = new List<Specimen>();
             oldPopulation = new List<Specimen>();
@@ -71,7 +67,7 @@ namespace GA
                     Specimen firstParent = Population[i];
                     Specimen secondParent = Population[j];
 
-                    Specimen child = firstParent.Crossover(secondParent);
+                    Specimen child = new Specimen(firstParent,secondParent);
                     if (random.NextDouble() < MutationRate)
                         child.Mutate();
 
@@ -114,7 +110,7 @@ namespace GA
             Specimen best = Population[0];
             for (int i = 0; i < Population.Count; i++)
             {
-                totalFitness += Population[i].CalculateFitness(Population[i]);
+                totalFitness += Population[i].Fitness;
 
                 if (Population[i].Fitness < best.Fitness)
                     best = Population[i];
@@ -122,34 +118,5 @@ namespace GA
             BestFit = best.Fitness;
             best.Genes.CopyTo(BestGenes, 0);
         }
-
-        //private Specimen SelectParent()
-        //{
-        //    System.Threading.Thread.Sleep(100);
-        //    double randNumber = random.NextDouble() * totalFitness;
-        //    int index = -1;
-        //    int mid;
-        //    int first = 0;
-        //    int last = Population.Count - 1;
-
-        //    mid = (first + last) / 2;
-        //    while (index == -1 && first <= last)
-        //    {
-        //        if (randNumber < Population[mid].Fitness)
-        //        {
-        //            last = mid;
-        //        }
-        //        else if (randNumber > Population[mid].Fitness)
-        //        {
-        //            first = mid;
-        //        }
-        //        mid = (first + last) / 2;
-
-        //        if ((last - first) == 1)
-        //            index = last;
-        //    }
-
-        //    return Population[index];
-        //}
     }
 }
