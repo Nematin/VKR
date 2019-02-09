@@ -9,114 +9,117 @@ namespace GA
 {
     public class GeneticAlgorithm
     {
-        public ArrayList allPopulation = new ArrayList();
+        public List<List<Specimen>> allGenerations = new List<List<Specimen>>();
 
-        public List<Specimen> newPopulation = new List<Specimen>();
-        public List<Specimen> oldPopulation = new List<Specimen>();
+        private List<Specimen> newGeneration = new List<Specimen>();
+        private List<Specimen> oldGeneration = new List<Specimen>();
 
-        public List<Specimen> Population { get; set; }
-        public int Generation { get; set; }
-        public double MutationRate { get; set; }
+        public List<Specimen> CurrentGeneration { get; set; }
+        public int GenerationNum { get; set; }
         public double BestFit { get; set; }
-        public double[] BestGenes { get; set; }
-        public int PopulationSize { get; set; }
+        public Specimen BestSpecimen { get; set; }
 
-        private Random random;
         private double totalFitness;
 
+        public GeneticAlgorithmParameters Parameters { get; }
+        private readonly PopulationSetting population;
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, double mutationRate, double mutationAmplitude)
+
+        public GeneticAlgorithm(GeneticAlgorithmParameters parameters, PopulationSetting population)
         {
-            Generation = 0;
-            MutationRate = mutationRate;
-            Population = new List<Specimen>();
-            PopulationSize = populationSize;
+            GenerationNum = 0;
+            this.Parameters = parameters;
+            this.population = population;
 
-            this.random = random;
-
-            BestGenes = new double[dnaSize];
-
-            for (int i = 0; i < populationSize; i++)
+            CurrentGeneration = new List<Specimen>();
+            for (int i = 0; i < parameters.PopulationSize; i++)
             {
-                Population.Add(new Specimen(dnaSize, random, mutationAmplitude));
+                CurrentGeneration.Add(population.SpecimenGenerator.CreateOne());
                 System.Threading.Thread.Sleep(100);
             }
+
+            BestSpecimen = CurrentGeneration[0];
         }
 
         public void NewGeneration()
         {
-            if (Population.Count <= 0)
+            if (CurrentGeneration.Count <= 0)
                 return;
 
-            newPopulation = new List<Specimen>();
-            oldPopulation = new List<Specimen>();
+            newGeneration = new List<Specimen>();
+            oldGeneration = new List<Specimen>();
             List<Specimen> bestOfTheBest = new List<Specimen>();
-            allPopulation.Add(Population);
+            allGenerations.Add(CurrentGeneration);
 
-            for (int i = 0; i < Population.Count; i++)
+            for (int i = 0; i < CurrentGeneration.Count; i++)
             {
-                for (int j = 0; j < Population.Count; j++)
+                for (int j = 0; j < CurrentGeneration.Count; j++)
                 {
                     if (i == j)
                     {
                         j++;
                     }
-                    if (j == Population.Count)
+                    if (j == CurrentGeneration.Count)
                         break;
 
-                    Specimen firstParent = Population[i];
-                    Specimen secondParent = Population[j];
+                    var firstParent = CurrentGeneration[i];
+                    var secondParent = CurrentGeneration[j];
 
-                    Specimen child = new Specimen(firstParent,secondParent);
-                    if (random.NextDouble() < MutationRate)
-                        child.Mutate();
+                    var child = firstParent.CrossoverWith(secondParent);
+                    if (RandomForGA.Generator.NextDouble() < Parameters.MutationRate)
+                        child.Mutate(Parameters.MutationAmplitude);
 
 
-                    newPopulation.Add(child);
+                    newGeneration.Add(child);
                 }
             }
 
-            for (int i = 0; i < Population.Count; i++)
+            for (int i = 0; i < CurrentGeneration.Count; i++)
             {
-                oldPopulation.Add(Population[i]);
+                oldGeneration.Add(CurrentGeneration[i]);
             }
 
-            Population.Clear();
-            for (int i = 0; i < oldPopulation.Count; i++)
+            CurrentGeneration.Clear();
+            for (int i = 0; i < oldGeneration.Count; i++)
             {
-                Population.Add(oldPopulation[i]);
+                CurrentGeneration.Add(oldGeneration[i]);
             }
 
-            for (int i = 0; i < newPopulation.Count; i++)
+            for (int i = 0; i < newGeneration.Count; i++)
             {
-                Population.Add(newPopulation[i]);
+                CurrentGeneration.Add(newGeneration[i]);
             }
 
             CalculateFitness();
 
-            Population.Sort((a, b) => a.Fitness.CompareTo(b.Fitness));
+            CurrentGeneration.Sort((a, b) => population.FittingFunction(a).CompareTo(population.FittingFunction(b)));
 
-            for (int i = 0; i < PopulationSize; i++)
+            for (int i = 0; i < Parameters.PopulationSize; i++)
             {
-                bestOfTheBest.Add(Population[i]);
+                bestOfTheBest.Add(CurrentGeneration[i]);
             }
-            Population = bestOfTheBest;
-            Generation++;
+            CurrentGeneration = bestOfTheBest;
+            GenerationNum++;
         }
 
         public void CalculateFitness()
         {
             totalFitness = 0;
-            Specimen best = Population[0];
-            for (int i = 0; i < Population.Count; i++)
+            var best = CurrentGeneration[0];
+            double fitOfCurrentBest = population.FittingFunction(best);
+            for (int i = 0; i < CurrentGeneration.Count; i++)
             {
-                totalFitness += Population[i].Fitness;
+                totalFitness += population.FittingFunction(CurrentGeneration[i]);
 
-                if (Population[i].Fitness < best.Fitness)
-                    best = Population[i];
+                double fitOfIthSpesimen = population.FittingFunction(CurrentGeneration[i]);
+                if (fitOfIthSpesimen < fitOfCurrentBest)
+                {
+                    best = CurrentGeneration[i];
+                    fitOfCurrentBest = fitOfIthSpesimen;
+                }
             }
-            BestFit = best.Fitness;
-            best.Genes.CopyTo(BestGenes, 0);
+            BestFit = fitOfCurrentBest;
+            BestSpecimen = best;
         }
     }
 }

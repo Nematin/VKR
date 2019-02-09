@@ -7,7 +7,7 @@ namespace Aga
     {
         public static void Main(string[] args)
         {
-            GeneticTestEnvironment environment = new GeneticTestEnvironment();
+            GeneticSimulation environment = new GeneticSimulation();
             environment.RunEvolution();
             Console.ReadKey();
         }
