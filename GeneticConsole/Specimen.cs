@@ -15,9 +15,9 @@ namespace GA
 
         private Random random;
         private Func<double> getRandomGene; // Метод для получения случайного гена
-        private Func<int, double> fitFunction; // Метод для подсчёта приспоабливаемости (подсчёт значения функции)
+        private Func<Specimen, double> fitFunction; // Метод для подсчёта приспоабливаемости (подсчёт значения функции)
 
-        public Specimen(int size, Random random, Func<double> getRandomGene, Func<int, double> fitFunction, double mutationAmplitude, bool initGene = true)
+        public Specimen(int size, Random random, Func<double> getRandomGene, Func<Specimen, double> fitFunction, double mutationAmplitude, bool initGene = true)
         {
             Genes = new double[size];
             this.random = random;
@@ -34,9 +34,9 @@ namespace GA
             }
         }
 
-        public double CalculateFitness(int index)
+        public double CalculateFitness(Specimen specimen)
         {
-            Fitness = fitFunction(index);
+            Fitness = fitFunction(specimen);
             return Fitness;
         }
 
