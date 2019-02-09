@@ -73,7 +73,7 @@ namespace GA
 
                     Specimen child = firstParent.Crossover(secondParent);
                     if (random.NextDouble() < MutationRate)
-                        child.Mutate(child.Genes);
+                        child.Mutate();
 
 
                     newPopulation.Add(child);

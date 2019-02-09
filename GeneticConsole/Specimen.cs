@@ -51,7 +51,7 @@ namespace GA
             return child;
         }
 
-        public void Mutate(double[] Genes)
+        public void Mutate()
         {
             for (int i = 0; i < Genes.Length; i++)
             {
