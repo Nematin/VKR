@@ -145,6 +145,7 @@ namespace GA
             //result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
 
             result = Math.Pow((specimen.Genes[0] + 2 * specimen.Genes[1] - 7), 2) + Math.Pow((2 * specimen.Genes[0] + specimen.Genes[1] - 5), 2);
+
             return result;
         }
 
