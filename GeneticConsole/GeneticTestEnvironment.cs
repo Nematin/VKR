@@ -12,6 +12,7 @@ namespace GA
         private Random random = new Random();
         private double mutationRate;
         private double crossoverRate;
+        private double mutationAmplitude;
         private GeneticAlgorithm geneticAlgorithm;
 
         public GeneticTestEnvironment()
@@ -24,6 +25,8 @@ namespace GA
             dnaSize = 2;
             mutationRate = 0.3;
             crossoverRate = 0.3;
+            mutationAmplitude = 0.5;
+            
 
             geneticAlgorithm = new GeneticAlgorithm(populationSize,
                                                            dnaSize,
@@ -31,9 +34,10 @@ namespace GA
                                                            GetRandomNumber,
                                                            FitFunction,
                                                            mutationRate,
-                                                           crossoverRate);
+                                                           crossoverRate,
+                                                           mutationAmplitude);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
                 geneticAlgorithm.NewGeneration(crossoverRate);
                 Console.WriteLine();
@@ -138,7 +142,9 @@ namespace GA
 
             //result = Math.Pow(dna.Genes[0], 4) - 4 * Math.Pow(dna.Genes[0], 3) - 2 * Math.Pow(dna.Genes[0], 2) + 5 * dna.Genes[0] + 9;
 
-            result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
+            //result = Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2) + 2;
+
+            result = 0.26 * (Math.Pow(dna.Genes[0], 2) + Math.Pow(dna.Genes[1], 2)) - 0.48 * dna.Genes[0] * dna.Genes[1];
             return result;
         }
 

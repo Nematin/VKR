@@ -48,11 +48,11 @@ namespace GA
             return child;
         }
 
-        public void Mutate(double[] Genes)
+        public void Mutate(double[] Genes, double mutationAmplitude)
         {
             for (int i = 0; i < Genes.Length; i++)
             {
-                Genes[i] = Genes[i] + random.NextDouble() * (Genes[i] / 5) - (Genes[i] / 3);
+                Genes[i] = Genes[i] + (2 * random.Next(0, 2) - 1) * Genes[i] * mutationAmplitude;
             }
         }
 

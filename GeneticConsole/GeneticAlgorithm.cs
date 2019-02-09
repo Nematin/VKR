@@ -21,18 +21,19 @@ namespace GA
         public double BestFit { get; set; }
         public double[] BestGenes { get; set; }
         public int PopulationSize { get; set; }
-
+        public double MutationAmplitude { get; set; }
         private Random random;
         private double totalFitness;
 
 
-        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int, double> fitFunction, double mutationRate, double crossoverRate)
+        public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<double> getRandomGene, Func<int, double> fitFunction, double mutationRate, double crossoverRate, double mutationAmplitude)
         {
             Generation = 0;
             MutationRate = mutationRate;
             Population = new List<Specimen>();
             CrossoverRate = crossoverRate;
             PopulationSize = populationSize;
+            MutationAmplitude = mutationAmplitude;
 
             this.random = random;
 
@@ -73,7 +74,7 @@ namespace GA
 
                     Specimen child = firstParent.Crossover(secondParent);
                     if (random.NextDouble() < MutationRate)
-                        child.Mutate(child.Genes);
+                        child.Mutate(child.Genes, MutationAmplitude);
 
 
                     newPopulation.Add(child);
@@ -106,20 +107,6 @@ namespace GA
             }
             Population = bestOfTheBest;
             Generation++;
-
-            //for (int i = 0; i < Population.Count; i++)
-            //{
-            //    Specimen firstParent = SelectParent();
-            //    Specimen secondParent = SelectParent();
-
-            //    Specimen child = firstParent.Crossover(secondParent);
-
-            //    if (MutationRate > random.NextDouble())
-            //        child.Mutate();
-
-            //    newPopulation.Add(child);
-            //}
-            //Population = newPopulation;
         }
 
         public void CalculateFitness()
