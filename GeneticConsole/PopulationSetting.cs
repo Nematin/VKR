@@ -4,7 +4,7 @@ namespace GA
 {
     abstract public class PopulationSetting
     {
-        public abstract ISpecimenGenerator SpecimenGenerator { get; }
+        abstract public Specimen CreateOne();
         public abstract Func<Specimen, double> FittingFunction { get; }
     }
 }

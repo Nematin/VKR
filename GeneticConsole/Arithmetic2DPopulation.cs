@@ -4,12 +4,6 @@ namespace GA
 {
     public class Arithmetic2DPopulation : PopulationSetting
     {
-        private readonly Arithmetic2DSpecimenGenerator generator;
-        public override ISpecimenGenerator SpecimenGenerator
-        {
-            get { return generator; }
-        }
-
         private readonly Func<ArithmeticSpecimen, double> environmentFittingFunction;
 
         public override Func<Specimen, double> FittingFunction
@@ -22,8 +16,12 @@ namespace GA
 
         public Arithmetic2DPopulation(Func<ArithmeticSpecimen, double> environmentFittingFunction)
         {
-            generator = new Arithmetic2DSpecimenGenerator();
             this.environmentFittingFunction = environmentFittingFunction;
+        }
+
+        public override Specimen CreateOne()
+        {
+            return new ArithmeticSpecimen(2);
         }
     }
 }

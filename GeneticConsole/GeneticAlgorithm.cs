@@ -34,7 +34,7 @@ namespace GA
             CurrentGeneration = new List<Specimen>();
             for (int i = 0; i < parameters.PopulationSize; i++)
             {
-                CurrentGeneration.Add(population.SpecimenGenerator.CreateOne());
+                CurrentGeneration.Add(population.CreateOne());
                 System.Threading.Thread.Sleep(100);
             }
 

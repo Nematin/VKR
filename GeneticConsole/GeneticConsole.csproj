@@ -50,11 +50,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specimen.cs" />
-    <Compile Include="SpecimenGenerator.cs" />
     <Compile Include="GeneticAlgorithmParameters.cs" />
     <Compile Include="RandomForGA.cs" />
-    <Compile Include="Arithmetic1DSpecimenGenerator.cs" />
-    <Compile Include="Arithmetic2DSpecimenGenerator.cs" />
     <Compile Include="PopulationType.cs" />
     <Compile Include="PopulationSetting.cs" />
     <Compile Include="Arithmetic1DPopulation.cs" />

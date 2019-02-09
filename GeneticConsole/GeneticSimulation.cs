@@ -16,7 +16,7 @@ namespace GA
                 mutationRate: 0.3,
                 mutationAmplitute: 0.5);
 
-            PopulationType specimenType = PopulationType.Arithmetic2D;
+            PopulationType specimenType = PopulationType.Arithmetic1D;
 
             PopulationSetting populationSetting;
             switch (specimenType)
