@@ -16,7 +16,8 @@ namespace GA
                 mutationRate: 0.3,
                 mutationAmplitute: 0.5);
 
-            PopulationType specimenType = PopulationType.Arithmetic1D;
+            //PopulationType specimenType = PopulationType.Arithmetic1D;
+            PopulationType specimenType = PopulationType.Arithmetic15D;
 
             PopulationSetting populationSetting;
             switch (specimenType)
@@ -27,28 +28,29 @@ namespace GA
                 case (PopulationType.Arithmetic2D):
                     populationSetting = new Arithmetic2DPopulation((s) => (Math.Pow((s.Genes[0] + 2 * s.Genes[1] - 7), 2) + Math.Pow((2 * s.Genes[0] + s.Genes[1] - 5), 2)));
                     break;
+                case (PopulationType.Arithmetic15D):
+                    populationSetting = new Arithemtic15DPopulation((s) =>GetResultOfFitFunctionForMultidimensionalFucntion(s));
+                    break;
 
                 default: throw new Exception("Тип особей, для которых запускается симуляция, не задан! Завершение работы...");
             }
 
-
-
             geneticAlgorithm = new GeneticAlgorithm(parameters, populationSetting);
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 5000; i++)
             {
                 geneticAlgorithm.NewGeneration();
-                Console.WriteLine();
-                Console.WriteLine("Поколение: " + geneticAlgorithm.GenerationNum);
-                ShowPopulation(geneticAlgorithm.CurrentGeneration);
-                ShowBestInGeneration(geneticAlgorithm.CurrentGeneration, populationSetting);
+                //Console.WriteLine();
+                //Console.WriteLine("Поколение: " + geneticAlgorithm.GenerationNum);
+                //ShowPopulation(geneticAlgorithm.CurrentGeneration);
+                //ShowBestInGeneration(geneticAlgorithm.CurrentGeneration, populationSetting);
             }
             ShowBestOfAllTime(geneticAlgorithm.allGenerations, populationSetting);
         }
 
         private void ShowPopulation(List<Specimen> population)
         {
-            StringBuilder sb = new StringBuilder();
+            //StringBuilder sb = new StringBuilder();
 
             for (int i = 0; i < population.Count; i++)
             {
@@ -98,10 +100,22 @@ namespace GA
                     worstGeneration = i;
                 }
             }
-            sb.Append("\nВывод\n");
-            sb.Append("Лучший из всех в поколении №" + (bestGeneration + 1) + ": " + best + " Значение функции: " + population.FittingFunction(best) + "\n");
-            sb.Append("Худший из всех в поколении №" + (worstGeneration + 1) + ": " + worst + " Значение функции: " + population.FittingFunction(worst) + "\n");
+            sb.Append("\n\nВывод\n");
+            sb.Append("Лучший из всех в поколении №" + (bestGeneration + 1) + ": " + best + "\n Значение функции: " + population.FittingFunction(best) + "\n\n");
+            sb.Append("Худший из всех в поколении №" + (worstGeneration + 1) + ": " + worst + "\n Значение функции: " + population.FittingFunction(worst) + "\n");
             Console.WriteLine(sb);
+        }
+
+        private double GetResultOfFitFunctionForMultidimensionalFucntion(ArithmeticSpecimen s)
+        {
+            double result = 0;
+
+            for (int i = 1; i < s.Genes.Length; i++)
+            {
+                result += (Math.Pow(1 - s.Genes[i-1], 2)) + (100 * Math.Pow(s.Genes[i] - Math.Pow(s.Genes[i-1], 2), 2)); // Rosenbrock Function (Multidimensional) 
+            }
+
+            return result;
         }
     }
 }

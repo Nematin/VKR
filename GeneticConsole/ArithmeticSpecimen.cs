@@ -17,7 +17,7 @@ namespace GA
             Genes = new double[size];
             for (int i = 0; i < Genes.Length; i++)
             {
-                Genes[i] = Math.Round(RandomForGA.Generator.Next(150, 1500) * Math.Round(RandomForGA.Generator.NextDouble(), 5), 5);
+                Genes[i] = Math.Round(RandomForGA.Generator.Next(10, 1500) * Math.Round(RandomForGA.Generator.NextDouble(), 5), 5);
             }
 
         }
