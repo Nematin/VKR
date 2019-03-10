@@ -6,6 +6,7 @@ namespace GA
     {
         Arithmetic1D,
         Arithmetic2D,
+        Arithmetic15D,
         Cars,
         StarShips
     }
