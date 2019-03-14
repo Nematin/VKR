@@ -17,7 +17,7 @@ namespace GA
                 mutationAmplitute: 0.5);
 
             //PopulationType specimenType = PopulationType.Arithmetic1D;
-            PopulationType specimenType = PopulationType.Arithmetic15D;
+            PopulationType specimenType = PopulationType.Cars;
 
             PopulationSetting populationSetting;
             switch (specimenType)
@@ -30,6 +30,9 @@ namespace GA
                     break;
                 case (PopulationType.Arithmetic15D):
                     populationSetting = new Arithemtic15DPopulation((s) =>GetResultOfFitFunctionForMultidimensionalFucntion(s));
+                    break;
+                case (PopulationType.Cars):
+                    populationSetting = new CarsPopulation((s) => GetResultOfFitFunctionForMultidimensionalFucntion(s));
                     break;
 
                 default: throw new Exception("Тип особей, для которых запускается симуляция, не задан! Завершение работы...");
@@ -113,6 +116,17 @@ namespace GA
             for (int i = 1; i < s.Genes.Length; i++)
             {
                 result += (Math.Pow(1 - s.Genes[i-1], 2)) + (100 * Math.Pow(s.Genes[i] - Math.Pow(s.Genes[i-1], 2), 2)); // Rosenbrock Function (Multidimensional) 
+            }
+
+            return result;
+        }
+        private double GetResultOfFitFunctionForMultidimensionalFucntion(CarSpecimen s)
+        {
+            double result = 0;
+
+            for (int i = 1; i < s.Genes.Length; i++)
+            {
+                result += (Math.Pow(1 - s.Genes[i - 1], 2)) + (100 * Math.Pow(s.Genes[i] - Math.Pow(s.Genes[i - 1], 2), 2)); // Rosenbrock Function (Multidimensional) 
             }
 
             return result;
