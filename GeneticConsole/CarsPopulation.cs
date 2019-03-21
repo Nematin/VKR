@@ -25,7 +25,7 @@ namespace GA
 
         public override Specimen CreateOne()
         {
-            return new CarSpecimen(10);
+            return new CarSpecimen();
         }
     }
 }
